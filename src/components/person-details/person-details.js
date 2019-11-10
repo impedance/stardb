@@ -5,6 +5,8 @@ import SwapiService from '../../services/swapi-service';
 import ErrorIndicator  from '../error-indicator'
 import Spinner from '../spinner';
 
+import ErrorButton from '../error-button';
+
 export default class PersonDetails extends Component {
 
   swapiService = new SwapiService();
@@ -93,6 +95,9 @@ const PersonView = ({person}) => {
           <li className="list-group-item">
             <span className="term">Eye Color</span>
             <span>{eyeColor}</span>
+          </li>
+          <li>
+          <ErrorButton />
           </li>
         </ul>
       </div>
