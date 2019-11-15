@@ -7,6 +7,19 @@ import Spinner from '../spinner';
 
 import ErrorButton from '../error-button';
 
+const Record = ({ item, field, label}) => {
+  return (
+    <li className="list-group-item">
+      <span className="term">{label}</span>
+      <span>{ item[field]}</span>
+    </li>
+  )
+}
+
+export {
+  Record
+}
+
 export default class ItemDetails extends Component {
 
   swapiService = new SwapiService();
@@ -14,7 +27,7 @@ export default class ItemDetails extends Component {
   state = {
     item: null,
     loading: true,
-    image: null,
+    image: '',
   };
 
   componentDidMount() {
@@ -26,15 +39,6 @@ export default class ItemDetails extends Component {
       this.updateitem();
     }
   }
-
-  // onitemLoaded = (item) => {
-  //   this.setState({ 
-  //     item,
-  //     image: getImageUrl(item),
-  //     loading: false,
-  //     error: false,
-  //   });
-  // }
 
   oneError = (err) => {
     this.setState({
@@ -51,61 +55,41 @@ export default class ItemDetails extends Component {
 
     getData(itemId)
       .then((item) => {
-        this.setState({ 
+        this.setState({
+          loading: false,
           item,
-          image: getImageUrl(item)})
+          image: getImageUrl(item),
+        })
       })
       .catch(this.onError);
   }
 
   render() {
-    const { item } = this.state;
+    const { item, image } = this.state;
     if (!item) {
       return <span>Select a item from a list</span>;
     }
-    const { loading, error } = this.state
-    const hasData = !(loading || error);
-    const errorMessage = error ? <ErrorIndicator /> : null;
-    const content = hasData ? <ItemView item={item} /> : <Spinner />;
+    const { id, name, gender,
+      birthYear, eyeColor } = item;
 
     return (
       <div className="item-details card">
-        {errorMessage}
-        {content}
-      </div>
-    )
-    
-  }
-}
+        <img className="item-image"
+          src={image}
+          alt="item"/>
 
-const ItemView = ({item}) => {
-
-  const { name, gender, birthYear, eyeColor, image } = item
-
-  return (
-    <>
-      <img className="item-image" alt=""
-        src={image} />
-      <div className="card-body">
-        <h4>{name}</h4>
-        <ul className="list-group list-group-flush">
-          <li className="list-group-item">
-            <span className="term">Gender</span>
-            <span>{gender}</span>
-          </li>
-          <li className="list-group-item">
-            <span className="term">Birth Year</span>
-            <span>{birthYear}</span>
-          </li>
-          <li className="list-group-item">
-            <span className="term">Eye Color</span>
-            <span>{eyeColor}</span>
-          </li>
-          <li>
+        <div className="card-body">
+          <h4>{name}</h4>
+          <ul className="list-group list-group-flush">
+            {
+              React.Children.map(this.props.children, (child) => {                
+                return React.cloneElement(child, { item });
+              })
+            }
+          </ul>
           <ErrorButton />
-          </li>
-        </ul>
+        </div>
       </div>
-  </>
-  )
+    );
+  }
 }
