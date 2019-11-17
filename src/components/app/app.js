@@ -8,6 +8,14 @@ import ItemDetails, { Record } from '../item-details';
 import './app.css';
 import SwapiService from '../../services/swapi-service';
 import ErrorBoundry from '../error-boundry';
+import {
+  PersonDetails,
+  PlanetDetails,
+  StarshipDetails,
+  PersonList,
+  PlanetList,
+  StarshipList
+} from '../sw-components/item-lists'
 import Row from '../row';
 import ItemList from '../item-list/item-list';
 
@@ -48,7 +56,8 @@ export default class App extends Component {
       getPersonImage,
       getPlanetImage,
       getAllPeople,
-      getAllPlanets } = this.swapiService;
+      getAllPlanets,
+      getAllStarships } = this.swapiService;
 
     const personDetails = (
       <ItemDetails 
@@ -78,19 +87,29 @@ export default class App extends Component {
         <div className="stardb-app">
           <Header />
           {planet}
-          <ItemList 
-            getData={getAllPeople}
+          <PersonList 
             onItemSelected={() => {}}
             >
               { ({name}) => <span> {name} </span>}
-              </ItemList>
-          <ItemList 
+          </PersonList>
+          <StarshipList 
+            onItemSelected={() => {}}
+            >
+              { ({name}) => <span> {name} </span>}            
+          </StarshipList>
+          <PlanetList
+            onItemSelected={() => {}}
+            >
+              { ({name}) => <span> {name} </span>}
+          </PlanetList> */}
+        
+          {/* <ItemList 
             getData={getAllPlanets}
             onItemSelected={() => {}}
             >
               { ({name}) => <span> {name} </span>}
               </ItemList>
-          {/* <Row
+          <Row
             left={personDetails}
             right={starshipDetails}
           /> */}
