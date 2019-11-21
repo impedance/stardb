@@ -1,23 +1,32 @@
 import React, {Component} from 'react';
 import Spinner from '../spinner';
 
-export const withData = (View, getData) => {
+export const withData = (View) => {
   return class extends Component {
 
   state = {
     data: []
   }  
 
-  componentDidMount() {
+  componentDidUpdate(prevProps) {
+    if (this.props.getData !== prevProps.getData) {
+      this.update();
+    }
+  }
 
-    getData()
+  componentDidMount() {
+    this.update();
+  }
+
+  update() {
+    this.props.getData()
       .then((data) => {
         this.setState({
           data
         });
       });
   }
-    render() {
+  render() {
       const { data } = this.state;
     if (!data) {
       return <Spinner />;
